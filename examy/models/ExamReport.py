@@ -9,7 +9,7 @@ from examy.models.TestResult import TestResult
 class ExamReport:
     descriptor: ExamDescriptor
     score: float
-    test_results: list[TestResult]
+    _test_results: list[TestResult]
     ranks: Ranking = None
     _true_count: InitVar[int] = None
     _false_count: InitVar[int] = None
@@ -26,19 +26,19 @@ class ExamReport:
         self, _true_count, _false_count, _empty_count, _net, _question_count
     ):
         if _true_count is None:
-            _true_count = sum([test.true_count for test in self.test_results])
+            _true_count = sum([test.true_count for test in self._test_results])
         object.__setattr__(self, "true_count", _true_count)
 
         if _false_count is None:
-            _false_count = sum([test.false_count for test in self.test_results])
+            _false_count = sum([test.false_count for test in self._test_results])
         object.__setattr__(self, "false_count", _false_count)
 
         if _empty_count is None:
-            _empty_count = sum([test.empty_count for test in self.test_results])
+            _empty_count = sum([test.empty_count for test in self._test_results])
         object.__setattr__(self, "empty_count", _empty_count)
 
         if _net is None:
-            _net = sum([test.net for test in self.test_results])
+            _net = sum([test.net for test in self._test_results])
         object.__setattr__(self, "net", _net)
 
         if _question_count is None:
