@@ -63,7 +63,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     for i in ("gt_ogrencino_adsoyadedit", "gt_ogrencino_adedit"):
 
         try:
-            driver.find_element("id", i).send_keys(student.name)
+            driver.find_element("id", i).send_keys(student.login_name)
         except NoSuchElementException:
             pass
         else:

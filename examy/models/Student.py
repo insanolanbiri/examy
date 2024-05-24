@@ -12,6 +12,7 @@ class Student:
     district: str
     grade_: dataclasses.InitVar[str | int]
     _reports: list[ExamReport] = dataclasses.field(default_factory=list)
+    login_name: str = ""
     grade: str = dataclasses.field(init=False)
 
     def __post_init__(self, grade_):
@@ -20,6 +21,9 @@ class Student:
             self.grade = str(grade_) + ".Sınıf"
         else:
             self.grade = grade_
+
+        if not self.login_name:
+            self.login_name = self.name.split()[0]
 
         # fix capitalization
         from examy.utils import TurkishStr
