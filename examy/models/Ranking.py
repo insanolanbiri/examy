@@ -16,9 +16,7 @@ class Ranking:
     global_attendance: int = None
 
     @classmethod
-    def from_sequences(
-        cls, ranks: Sequence[int], attendances: Sequence[int]
-    ) -> "Ranking":
+    def from_sequences(cls, ranks: Sequence[int], attendances: Sequence[int]) -> "Ranking":
         assert len(ranks) == len(attendances) == 4
         one_by_one = []
 

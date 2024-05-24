@@ -16,9 +16,7 @@ class ExamFetcher(ABC):
     fetcher_codename: str
 
     @abstractmethod
-    def fetch(
-        self, student: Student, exam_descriptor: ExamDescriptor, *args, **kwargs
-    ) -> ExamReport:
+    def fetch(self, student: Student, exam_descriptor: ExamDescriptor, *args, **kwargs) -> ExamReport:
         pass
 
 
@@ -42,8 +40,7 @@ class SeleniumCompatibleFetcher(ExamFetcher, ABC):
         def wrapper(self: "SeleniumCompatibleFetcher", *args, **kwargs):
             if not self.is_driver_available():
                 raise InvalidAction(
-                    "Attempted to execute an action with selenium without configuring any driver for "
-                    "the process"
+                    "Attempted to execute an action with selenium without configuring any driver for " "the process"
                 )
             return func(self, *args, **kwargs)
 

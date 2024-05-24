@@ -24,9 +24,7 @@ class ExamReport:
     net: float = field(init=False)
     question_count: int = field(init=False)
 
-    def __post_init__(
-        self, _true_count, _false_count, _empty_count, _net, _question_count
-    ):
+    def __post_init__(self, _true_count, _false_count, _empty_count, _net, _question_count):
         if _true_count is None:
             _true_count = sum([test.true_count for test in self._test_results])
         object.__setattr__(self, "true_count", _true_count)
@@ -44,9 +42,7 @@ class ExamReport:
         object.__setattr__(self, "net", _net)
 
         if _question_count is None:
-            _question_count = sum(
-                [test_d.question_count for test_d in self.descriptor.test_descriptors]
-            )
+            _question_count = sum([test_d.question_count for test_d in self.descriptor.test_descriptors])
         object.__setattr__(self, "question_count", _question_count)
 
     def iter_tests(self) -> Iterator[tuple[TestDescriptor, TestResult]]:

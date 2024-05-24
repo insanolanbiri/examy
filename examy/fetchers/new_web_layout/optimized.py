@@ -23,9 +23,7 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
 
         logout(self.driver, exam_descriptor)
 
-        response = requests.get(
-            address, allow_redirects=False, headers={"User-Agent": "Mozilla/5.0"}
-        )
+        response = requests.get(address, allow_redirects=False, headers={"User-Agent": "Mozilla/5.0"})
 
         root = lxml.html.fromstring(response.content)
 

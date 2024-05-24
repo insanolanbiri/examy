@@ -14,7 +14,5 @@ class TestResult:
 
     def __post_init__(self, descriptor, _empty_count):
         if _empty_count is None:
-            _empty_count = (
-                descriptor.question_count - self.true_count - self.false_count
-            )
+            _empty_count = descriptor.question_count - self.true_count - self.false_count
         object.__setattr__(self, "empty_count", _empty_count)

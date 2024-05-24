@@ -26,9 +26,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
         )
     ).click()
 
-    grade_selector = driver.find_element(
-        "id", "select2-gt_ogrencino_sinifcombo-results"
-    )
+    grade_selector = driver.find_element("id", "select2-gt_ogrencino_sinifcombo-results")
     grade_selector.find_element("xpath", f"//li[text()='{student.grade}']").click()
 
     # province
@@ -36,23 +34,17 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
         "xpath",
         "/html/body/div/div[1]/div[1]/div[2]/div/div/div[1]/form/div[2]/div/span/span[1]/span",
     ).click()
-    province_selector = driver.find_element(
-        "id", "select2-gt_ogrencino_ilcombo-results"
-    )
+    province_selector = driver.find_element("id", "select2-gt_ogrencino_ilcombo-results")
     click_list_item_by_visible_text(province_selector, student.province)
 
     # district
     driver.find_element("id", "select2-gt_ogrencino_ilcecombo-container").click()
-    district_selector = driver.find_element(
-        "id", "select2-gt_ogrencino_ilcecombo-results"
-    )
+    district_selector = driver.find_element("id", "select2-gt_ogrencino_ilcecombo-results")
     click_list_item_by_visible_text(district_selector, student.district)
 
     # school
     driver.find_element("id", "select2-gt_ogrencino_kurumcombo-container").click()
-    school_selector = driver.find_element(
-        "id", "select2-gt_ogrencino_kurumcombo-results"
-    )
+    school_selector = driver.find_element("id", "select2-gt_ogrencino_kurumcombo-results")
     click_list_item_by_visible_text(school_selector, student.school)
 
     # number
@@ -86,9 +78,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     except TimeoutException as e:
         from examy.models.exceptions import StudentNotFound
 
-        raise StudentNotFound(
-            f'Student probably did not take any exams from "{exam_descriptor.login_url}"'
-        ) from e
+        raise StudentNotFound(f'Student probably did not take any exams from "{exam_descriptor.login_url}"') from e
 
 
 def click_list_item_by_visible_text(parent: WebElement, text: str):
@@ -118,9 +108,7 @@ def get_result_page_address(driver: WebDriver, exam_descriptor: ExamDescriptor) 
     link = tree.xpath(f"/html/body/section//a[text()='{exam_descriptor.exam_name}']")
 
     if len(link) == 0:
-        raise StudentDidNotTakeExam(
-            f"Student did not take the exam named {exam_descriptor.exam_name}"
-        )
+        raise StudentDidNotTakeExam(f"Student did not take the exam named {exam_descriptor.exam_name}")
 
     link = link[0]
 
