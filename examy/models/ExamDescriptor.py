@@ -8,5 +8,6 @@ class ExamDescriptor:
     login_url: str
     result_page_layout: str
     exam_name: str
+    friendly_name: str
     test_descriptors: list[TestDescriptor]
     logout_url: str = None
