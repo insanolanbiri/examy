@@ -1,7 +1,9 @@
 from dataclasses import dataclass, InitVar, field
+from typing import Iterator
 
 from examy.models.ExamDescriptor import ExamDescriptor
 from examy.models.Ranking import Ranking
+from examy.models.TestDescriptor import TestDescriptor
 from examy.models.TestResult import TestResult
 
 
@@ -46,3 +48,6 @@ class ExamReport:
                 [test_d.question_count for test_d in self.descriptor.test_descriptors]
             )
         object.__setattr__(self, "question_count", _question_count)
+
+    def iter_tests(self) -> Iterator[tuple[TestDescriptor, TestResult]]:
+        return zip(self.descriptor.test_descriptors, self._test_results)
