@@ -11,7 +11,7 @@ class Student:
     province: str
     district: str
     grade_: dataclasses.InitVar[str | int]
-    _reports: list[ExamReport] = dataclasses.field(default_factory=list)
+    reports: list[ExamReport] = dataclasses.field(default_factory=list)
     login_name: str = ""
     grade: str = dataclasses.field(init=False)
 
@@ -36,7 +36,7 @@ class Student:
         try:
             self.get_report(report.descriptor.exam_name)
         except ValueError:
-            self._reports.append(report)
+            self.reports.append(report)
             return report
         else:
             # return report
@@ -45,7 +45,7 @@ class Student:
             )
 
     def get_report(self, exam_name: str) -> ExamReport:
-        for report in self._reports:
+        for report in self.reports:
             if exam_name == report.descriptor.exam_name:
                 return report
         raise ValueError(f"No report with name {exam_name}")
