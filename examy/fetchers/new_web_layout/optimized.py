@@ -19,9 +19,10 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
 
         login(self.driver, student, exam_descriptor)
 
-        address = get_result_page_address(self.driver, exam_descriptor)
-
-        logout(self.driver, exam_descriptor)
+        try:
+            address = get_result_page_address(self.driver, exam_descriptor)
+        finally:
+            logout(self.driver, exam_descriptor)
 
         response = requests.get(address, allow_redirects=False, headers={"User-Agent": "Mozilla/5.0"})
 
