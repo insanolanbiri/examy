@@ -3,7 +3,7 @@ from typing import Iterator
 
 from examy.models.ExamDescriptor import ExamDescriptor
 from examy.models.Ranking import Ranking
-from examy.models.TestDescriptor import TestDescriptor
+from examy.models.Test import Test
 from examy.models.TestResult import TestResult
 
 
@@ -42,8 +42,8 @@ class ExamReport:
         object.__setattr__(self, "net", _net)
 
         if _question_count is None:
-            _question_count = sum([test_d.question_count for test_d in self.descriptor.test_descriptors])
+            _question_count = sum([test_d.question_count for test_d in self.descriptor.tests])
         object.__setattr__(self, "question_count", _question_count)
 
-    def iter_tests(self) -> Iterator[tuple[TestDescriptor, TestResult]]:
-        return zip(self.descriptor.test_descriptors, self._test_results)
+    def iter_tests(self) -> Iterator[tuple[Test, TestResult]]:
+        return zip(self.descriptor.tests, self._test_results)

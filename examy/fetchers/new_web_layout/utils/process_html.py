@@ -23,7 +23,7 @@ def process_result_html(root: lxml.html.HtmlElement, student: Student, exam_desc
     ranks = Ranking(*ranks_and_attendances)
 
     test_results = []
-    for test_d in exam_descriptor.test_descriptors:
+    for test_d in exam_descriptor.tests:
         example_element = root.xpath(f'.//*[@title = "{test_d.name} soru sayısı"]')[0]
         test_root = example_element.xpath("./../../..")[0]
 

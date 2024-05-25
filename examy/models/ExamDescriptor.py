@@ -1,6 +1,6 @@
 import dataclasses
 
-from examy.models.TestDescriptor import TestDescriptor
+from examy.models.Test import Test
 
 
 @dataclasses.dataclass(frozen=True)
@@ -9,5 +9,5 @@ class ExamDescriptor:
     result_page_layout: str
     exam_name: str
     friendly_name: str
-    test_descriptors: list[TestDescriptor]
+    tests: list[Test]
     logout_url: str = None
