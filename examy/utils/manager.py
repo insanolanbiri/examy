@@ -74,7 +74,6 @@ class Manager(object):
             with self.errored_students_lock:
                 if st not in err_list:
                     err_list.append(st)
-            print(err_list)
             logger.error(f"Failed to fetch results of {st.name}", exc_info=True)
 
     def fetch_multithread(
