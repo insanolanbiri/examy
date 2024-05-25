@@ -4,6 +4,12 @@ version = "0.1.0"
 description = ""
 authors = ["Eren Akgün <iobthedev@outlook.com>"]
 readme = "README.md"
+license = "GPL-2.0-only"
+repository = "https://github.com/insanolanbiri/examy"
+classifiers = [
+    "Operating System :: OS Independent",
+]
+
 
 [tool.poetry.dependencies]
 python = "^3.11"
