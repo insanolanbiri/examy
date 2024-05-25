@@ -43,8 +43,10 @@ class Student:
             # return report
             raise ValueError(f"A report with name '{report.descriptor.exam_name}' already exists")
 
-    def get_report(self, exam_name: str) -> ExamReport:
+    def get_report(self, exam_name: str, soft_return: bool = False) -> ExamReport | None:
         for report in self.reports:
             if exam_name == report.descriptor.exam_name:
                 return report
+        if soft_return:
+            return None
         raise ValueError(f"No report with name {exam_name}")
