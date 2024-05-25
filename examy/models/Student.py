@@ -11,6 +11,7 @@ class Student:
     province: str
     district: str
     grade_: dataclasses.InitVar[str | int]
+    class_: str
     reports: list[ExamReport] = dataclasses.field(default_factory=list)
     login_name: str = ""
     grade: str = dataclasses.field(init=False)
