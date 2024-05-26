@@ -21,10 +21,13 @@ class ResultExporter(object):
         "false_count": ["Report", "false_count"],
         "empty_count": ["Report", "empty_count"],
         "net": ["Report", "net"],
-        "{short_test_name}_true": ["TestResult", "true_count"],
-        "{short_test_name}_false": ["TestResult", "false_count"],
-        "{short_test_name}_empty": ["TestResult", "empty_count"],
-        "{short_test_name}_net": ["TestResult", "net"],
+        "group1": ["group", {
+            "{short_test_name}_true": ["TestResult", "true_count"],
+            "{short_test_name}_false": ["TestResult", "false_count"],
+            "{short_test_name}_empty": ["TestResult", "empty_count"],
+            "{short_test_name}_net": ["TestResult", "net"],
+                },
+        ],
     }
 
     export_dict_common: OrderedDict = {
@@ -33,7 +36,10 @@ class ResultExporter(object):
         "province_attendance": ["Ranking", "province_attendance"],
         "global_attendance": ["Ranking", "global_attendance"],
         "question_count": ["Report", "question_count"],
-        "{short_test_name}_question_count": ["Test", "question_count"],
+        "group1": ["group", {
+            "{short_test_name}_question_count": ["Test", "question_count"],
+        }
+        ],
     }
 
     def __init__(self):
@@ -53,20 +59,19 @@ class ResultExporter(object):
         for k, v in export_scheme.items():
             obj, attrib = v
             match obj:
-                case "Test" | "TestResult":
+                case "group":
                     for td, tr in report.iter_tests():
-                        if obj == "Test":
-                            export.append(td.__getattribute__(attrib))
-                        else:
-                            export.append(tr.__getattribute__(attrib))
-                case other:
-                    match other:
-                        case "Student":
-                            export.append(st.__getattribute__(attrib))
-                        case "Report":
-                            export.append(report.__getattribute__(attrib))
-                        case "Ranking":
-                            export.append(report.ranks.__getattribute__(attrib))
+                        for k2, (obj2, attrib2) in attrib.items():
+                            if obj2 == "Test":
+                                export.append(td.__getattribute__(attrib2))
+                            else:
+                                export.append(tr.__getattribute__(attrib2))
+                case "Student":
+                    export.append(st.__getattribute__(attrib))
+                case "Report":
+                    export.append(report.__getattribute__(attrib))
+                case "Ranking":
+                    export.append(report.ranks.__getattribute__(attrib))
         return export
 
     @staticmethod
@@ -75,9 +80,10 @@ class ResultExporter(object):
         for k, v in export_scheme.items():
             obj, attrib = v
             match obj:
-                case "Test" | "TestResult":
+                case "group":
                     for td, tr in report.iter_tests():
-                        headers.append(k.format(short_test_name = td.short_name))
+                        for k2, _ in attrib.items():
+                            headers.append(k2.format(short_test_name = td.short_name))
                 case _:
                     headers.append(k)
         return headers
