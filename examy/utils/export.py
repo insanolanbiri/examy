@@ -1,4 +1,3 @@
-from collections import OrderedDict
 from typing import Iterator
 
 from examy.models.ExamDescriptor import ExamDescriptor
@@ -7,7 +6,7 @@ from examy.models.Student import Student
 
 
 class ResultExporter(object):
-    export_dict_student: OrderedDict = {
+    export_dict_student = {
         "name": ["Student", "name"],
         "number": ["Student", "number"],
         "class": ["Student", "class_"],
@@ -30,7 +29,7 @@ class ResultExporter(object):
         ],
     }
 
-    export_dict_common: OrderedDict = {
+    export_dict_common = {
         "school_attendance": ["Ranking", "school_attendance"],
         "district_attendance": ["Ranking", "district_attendance"],
         "province_attendance": ["Ranking", "province_attendance"],
@@ -53,7 +52,7 @@ class ResultExporter(object):
         self.common_export = []
 
     @staticmethod
-    def _make_export(st: Student, desc: ExamDescriptor, report: ExamReport, export_scheme: OrderedDict) -> list:
+    def _make_export(st: Student, desc: ExamDescriptor, report: ExamReport, export_scheme: dict) -> list:
         export = []
 
         for k, v in export_scheme.items():
@@ -75,7 +74,7 @@ class ResultExporter(object):
         return export
 
     @staticmethod
-    def _make_headers(st: Student, desc: ExamDescriptor, report: ExamReport, export_scheme: OrderedDict) -> list:
+    def _make_headers(st: Student, desc: ExamDescriptor, report: ExamReport, export_scheme: dict) -> list:
         headers = []
         for k, v in export_scheme.items():
             obj, attrib = v
