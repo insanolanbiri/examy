@@ -24,7 +24,12 @@ def process_result_html(root: lxml.html.HtmlElement, student: Student, exam_desc
 
     test_results = []
     for test_d in exam_descriptor.tests:
-        example_element = root.xpath(f'.//*[@title = "{test_d.name} soru sayısı"]')[0]
+        example_element = root.xpath(f'.//*[@title = "{test_d.name} soru sayısı"]')
+        if not example_element:
+            test_results.append(TestResult(0, 0, 0, test_d))
+            continue
+
+        example_element = example_element[0]
         test_root = example_element.xpath("./../../..")[0]
 
         net = turkish_str_to_float(test_root.xpath("./div[5]/div/div/*[last()]")[0].text_content())
