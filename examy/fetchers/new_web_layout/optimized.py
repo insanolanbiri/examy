@@ -8,6 +8,7 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
     fetcher_codename = "optimized"
 
     @SeleniumCompatibleFetcher.requires_driver
+    @SeleniumCompatibleFetcher.check_fetch_arguments
     def fetch(self, student, exam_descriptor, *args, **kwargs):
         from examy.fetchers.new_web_layout.utils.webpage_actions import (
             login,

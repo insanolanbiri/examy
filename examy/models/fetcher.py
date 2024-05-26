@@ -15,6 +15,17 @@ class ExamFetcher(ABC):
     result_page_layout: str
     fetcher_codename: str
 
+    @staticmethod
+    def check_fetch_arguments(func):
+        @wraps(func)
+        def wrapper(self: 'ExamFetcher', student: Student, exam_descriptor: ExamDescriptor, *args, **kwargs):
+            if exam_descriptor.result_page_layout != self.result_page_layout:
+                raise ValueError(f"Expected result page layout '{self.result_page_layout}', "
+                                 f"got '{exam_descriptor.result_page_layout}' instead.")
+            return func(self, student, exam_descriptor, *args, **kwargs)
+        return wrapper
+
+    @check_fetch_arguments
     @abstractmethod
     def fetch(self, student: Student, exam_descriptor: ExamDescriptor, *args, **kwargs) -> ExamReport:
         pass
@@ -47,6 +58,7 @@ class SeleniumCompatibleFetcher(ExamFetcher, ABC):
         return wrapper
 
     @requires_driver
+    @ExamFetcher.check_fetch_arguments
     @abstractmethod
     def fetch(self, student, exam_descriptor, *args, **kwargs):
         pass
