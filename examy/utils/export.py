@@ -20,12 +20,14 @@ class ResultExporter(object):
         "false_count": ["Report", "false_count"],
         "empty_count": ["Report", "empty_count"],
         "net": ["Report", "net"],
-        "group1": ["group", {
-            "{short_test_name}_true": ["TestResult", "true_count"],
-            "{short_test_name}_false": ["TestResult", "false_count"],
-            "{short_test_name}_empty": ["TestResult", "empty_count"],
-            "{short_test_name}_net": ["TestResult", "net"],
-                },
+        "group1": [
+            "group",
+            {
+                "{short_test_name}_true": ["TestResult", "true_count"],
+                "{short_test_name}_false": ["TestResult", "false_count"],
+                "{short_test_name}_empty": ["TestResult", "empty_count"],
+                "{short_test_name}_net": ["TestResult", "net"],
+            },
         ],
     }
 
@@ -35,9 +37,11 @@ class ResultExporter(object):
         "province_attendance": ["Ranking", "province_attendance"],
         "global_attendance": ["Ranking", "global_attendance"],
         "question_count": ["Report", "question_count"],
-        "group1": ["group", {
-            "{short_test_name}_question_count": ["Test", "question_count"],
-        }
+        "group1": [
+            "group",
+            {
+                "{short_test_name}_question_count": ["Test", "question_count"],
+            },
         ],
     }
 
@@ -82,7 +86,7 @@ class ResultExporter(object):
                 case "group":
                     for td, tr in report.iter_tests():
                         for k2, _ in attrib.items():
-                            headers.append(k2.format(short_test_name = td.short_name))
+                            headers.append(k2.format(short_test_name=td.short_name))
                 case _:
                     headers.append(k)
         return headers
@@ -93,15 +97,13 @@ class ResultExporter(object):
             report = st.get_report(desc.exam_name, soft_return=True)
             if report is None:
                 continue
-            self.student_export.append(
-                self._make_export(st,desc,report,self.export_dict_student)
-            )
+            self.student_export.append(self._make_export(st, desc, report, self.export_dict_student))
             if not commons_set:
                 commons_set = True
-                self.student_export_headers = self._make_headers(st,desc,report,self.export_dict_student)
+                self.student_export_headers = self._make_headers(st, desc, report, self.export_dict_student)
 
-                self.common_export_headers = self._make_headers(st,desc,report,self.export_dict_common)
-                self.common_export = self._make_export(st,desc,report, self.export_dict_common)
+                self.common_export_headers = self._make_headers(st, desc, report, self.export_dict_common)
+                self.common_export = self._make_export(st, desc, report, self.export_dict_common)
 
     def sort(self, by: str, reverse: bool = False):
         index = self.student_export_headers.index(by)
@@ -109,6 +111,7 @@ class ResultExporter(object):
 
     def to_csv(self, student_path: str, common_path: str):
         import csv
+
         with open(student_path, "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(self.student_export_headers)

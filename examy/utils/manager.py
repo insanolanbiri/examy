@@ -15,7 +15,7 @@ logger = logging.getLogger(__name__)
 
 class Manager(object):
     def __init__(self, webdriver_generator: Callable[[], WebDriver] | None = None):
-        self.errored_students: dict[str,list[Student]] = {}
+        self.errored_students: dict[str, list[Student]] = {}
         self.errored_students_lock = threading.Lock()
         self._groups: list[StudentGroup] = []
         self.webdriver_generator = webdriver_generator
@@ -64,7 +64,10 @@ class Manager(object):
         try:
             fetcher.fetch(st, self._exam_descriptor)
             res = st.reports[-1]
-            logger.info(f"Get: {st.name}: ok; score={res.score}, net={res.net}, class_rank={res.ranks.class_rank}, school_rank={res.ranks.school_rank}")
+            logger.info(
+                f"Get: {st.name}: ok; score={res.score}, net={res.net}, "
+                f"class_rank={res.ranks.class_rank}, school_rank={res.ranks.school_rank}"
+            )
             with self.errored_students_lock:
                 if st in err_list:
                     err_list.remove(st)
