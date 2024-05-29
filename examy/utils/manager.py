@@ -105,7 +105,7 @@ class Manager(object):
         with ThreadPoolExecutor(initializer=self._set_driver, max_workers=max_workers) as executor:
             for i, _ in enumerate(executor.map(self._fetch_single, students_to_fetch), 1):
                 # for loop is required for waiting for the results
-                logger.info(f"{i}/{count} done.")
+                logger.debug(f"{i}/{count} done.")
 
         for i in self._drivers.values():
             i.quit()
