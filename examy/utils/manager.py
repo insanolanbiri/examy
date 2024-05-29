@@ -65,7 +65,7 @@ class Manager(object):
             fetcher.fetch(st, self._exam_descriptor)
             res = st.reports[-1]
             logger.info(
-                f"Get: {st.name}: ok; score={res.score}, net={res.net}, "
+                f"{st.name}: ok; score={res.score}, net={res.net}, "
                 f"class_rank={res.ranks.class_rank}, school_rank={res.ranks.school_rank}"
             )
             with self.errored_students_lock:
