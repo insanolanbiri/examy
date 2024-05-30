@@ -88,5 +88,5 @@ jobs:
           draft: false
           prerelease: false
           tag_name: v${{ steps.version.outputs.version }}
-          name: ${{  github.ref_name }}
+          name: v${{ steps.version.outputs.version }}
           generate_release_notes: true
