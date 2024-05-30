@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "examy"
-version = "0.1.5"
+version = "0.1.6"
 description = ""
 authors = ["Eren Akgün <iobthedev@outlook.com>"]
 readme = "README.md"
