@@ -25,7 +25,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: "$PYTHON_VERSION"
+          python-version: "${{ env.PYTHON_VERSION }}"
 
       - name: Compile Python app
         run: python3 -m compileall .
@@ -51,7 +51,7 @@ jobs:
         id: setup-python
         uses: actions/setup-python@v5
         with:
-          python-version: "$PYTHON_VERSION"
+          python-version: "${{ env.PYTHON_VERSION }}"
           #cache: 'poetry'
 
       - name: Set up Poetry
