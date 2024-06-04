@@ -22,6 +22,7 @@ class Manager(object):
         self._fetchers: dict = {}
         self._exam_descriptor: ExamDescriptor | None = None
         self._fetcher_type: type[ExamFetcher] | None = None
+        self._fetch_kwargs: dict = {}
 
     @property
     def groups(self) -> list[StudentGroup]:
@@ -60,7 +61,7 @@ class Manager(object):
         fetcher = self._fetchers[threading.get_ident()]
 
         try:
-            fetcher.fetch(st, self._exam_descriptor)
+            fetcher.fetch(st, self._exam_descriptor, **self._fetch_kwargs)
             res = st.reports[-1]
             logger.info(
                 f"{st.name}: ok; score={res.score}, net={res.net}, "
@@ -80,11 +81,16 @@ class Manager(object):
         fetcher_type: type[ExamFetcher],
         subset: str = "all",
         max_workers: int | None = None,
+        fetch_kwargs: dict | None = None,
     ):
+        if fetch_kwargs is None:
+            fetch_kwargs = {}
+
         from concurrent.futures.thread import ThreadPoolExecutor
 
         self._fetcher_type = fetcher_type
         self._exam_descriptor = exam_descriptor
+        self._fetch_kwargs = fetch_kwargs
         err_list = self.errored_students.get(exam_descriptor.exam_name, list())
         self.errored_students[exam_descriptor.exam_name] = err_list
 
@@ -115,3 +121,4 @@ class Manager(object):
 
         self._fetcher_type = None
         self._exam_descriptor = None
+        self._fetch_kwargs = {}
