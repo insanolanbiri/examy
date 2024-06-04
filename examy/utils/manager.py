@@ -16,7 +16,6 @@ logger = logging.getLogger(__name__)
 class Manager(object):
     def __init__(self, webdriver_generator: Callable[[], WebDriver] | None = None):
         self.errored_students: dict[str, list[Student]] = {}
-        self.errored_students_lock = threading.Lock()
         self._groups: list[StudentGroup] = []
         self.webdriver_generator = webdriver_generator
 
@@ -57,10 +56,8 @@ class Manager(object):
 
         self._fetchers[threading.get_ident()] = fetcher
 
-    def _fetch_single(self, st: Student):
+    def _fetch_single(self, st: Student) -> tuple[bool, Student]:
         fetcher = self._fetchers[threading.get_ident()]
-
-        err_list = self.errored_students[self._exam_descriptor.exam_name]
 
         try:
             fetcher.fetch(st, self._exam_descriptor)
@@ -69,16 +66,13 @@ class Manager(object):
                 f"{st.name}: ok; score={res.score}, net={res.net}, "
                 f"class_rank={res.ranks.class_rank}, school_rank={res.ranks.school_rank}"
             )
-            with self.errored_students_lock:
-                if st in err_list:
-                    err_list.remove(st)
+            return False, st
         except StudentDidNotTakeExam:
             logger.info(f"{st.name} did not take the exam named '{self._exam_descriptor.exam_name}'")
+            return False, st
         except:
-            with self.errored_students_lock:
-                if st not in err_list:
-                    err_list.append(st)
             logger.error(f"Failed to fetch results of {st.name}", exc_info=True)
+            return True, st
 
     def fetch_multithread(
         self,
@@ -104,9 +98,15 @@ class Manager(object):
             raise ValueError(f"Invalid subset '{subset}'")
 
         with ThreadPoolExecutor(initializer=self._init_thread, max_workers=max_workers) as executor:
-            for i, _ in enumerate(executor.map(self._fetch_single, students_to_fetch), 1):
+            for i, (errored, st) in enumerate(executor.map(self._fetch_single, students_to_fetch), 1):
                 # for loop is required for waiting for the results
                 logger.debug(f"{i}/{count} done.")
+                if errored:
+                    if st not in err_list:
+                        err_list.append(st)
+                else:
+                    if st in err_list:
+                        err_list.remove(st)
 
         for f in self._fetchers.values():
             if isinstance(f, SeleniumCompatibleFetcher):
