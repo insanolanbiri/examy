@@ -17,7 +17,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     driver.get(exam_descriptor.login_url)
 
     # grade
-    WebDriverWait(driver, 6).until(
+    WebDriverWait(driver, 8).until(
         presence_of_element_located(
             (
                 "xpath",
@@ -67,7 +67,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
 
     # check if successful
     try:
-        WebDriverWait(driver, 6).until(
+        WebDriverWait(driver, 8).until(
             presence_of_element_located(
                 (
                     "xpath",
