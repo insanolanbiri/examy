@@ -55,10 +55,10 @@ class Manager(object):
         if issubclass(self._fetcher_type, SeleniumCompatibleFetcher):
             fetcher.driver = self.webdriver_generator()
 
-        self._fetchers[threading.current_thread().name] = fetcher
+        self._fetchers[threading.get_ident()] = fetcher
 
     def _fetch_single(self, st: Student):
-        fetcher = self._fetchers[threading.current_thread().name]
+        fetcher = self._fetchers[threading.get_ident()]
 
         err_list = self.errored_students[self._exam_descriptor.exam_name]
 
