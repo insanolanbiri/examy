@@ -9,7 +9,10 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
 
     @SeleniumCompatibleFetcher.requires_driver
     @SeleniumCompatibleFetcher.check_fetch_arguments
-    def fetch(self, student, exam_descriptor, *args, **kwargs):
+    def fetch(self, student, exam_descriptor, login_kwargs: dict | None = None, *args, **kwargs):
+        if login_kwargs is None:
+            login_kwargs = {}
+
         from examy.fetchers.new_web_layout.utils.webpage_actions import (
             login,
             get_result_page_address,
@@ -18,7 +21,7 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
         from examy.fetchers.new_web_layout.utils.process_html import process_result_html
         import requests
 
-        login(self.driver, student, exam_descriptor, **kwargs.get("login_kwargs"))
+        login(self.driver, student, exam_descriptor, **login_kwargs)
 
         try:
             address = get_result_page_address(self.driver, exam_descriptor)
