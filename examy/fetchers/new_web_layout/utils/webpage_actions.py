@@ -17,7 +17,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     driver.get(exam_descriptor.login_url)
 
     # grade
-    WebDriverWait(driver, 8).until(
+    WebDriverWait(driver, 5).until(
         presence_of_element_located(
             (
                 "xpath",
@@ -67,7 +67,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
 
     # check if successful
     try:
-        WebDriverWait(driver, 8).until(
+        WebDriverWait(driver, 3).until(
             url_changes(exam_descriptor.login_url)
         )
     except TimeoutException as e:
