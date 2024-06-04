@@ -50,7 +50,7 @@ class Manager(object):
             for st in group.iter_students():
                 yield st
 
-    def _set_driver(self) -> None:
+    def _init_thread(self) -> None:
         if issubclass(self._fetcher_type, SeleniumCompatibleFetcher):
             self._drivers[threading.current_thread().name] = self.webdriver_generator()
 
@@ -102,7 +102,7 @@ class Manager(object):
         else:
             raise ValueError(f"Invalid subset '{subset}'")
 
-        with ThreadPoolExecutor(initializer=self._set_driver, max_workers=max_workers) as executor:
+        with ThreadPoolExecutor(initializer=self._init_thread, max_workers=max_workers) as executor:
             for i, _ in enumerate(executor.map(self._fetch_single, students_to_fetch), 1):
                 # for loop is required for waiting for the results
                 logger.debug(f"{i}/{count} done.")
