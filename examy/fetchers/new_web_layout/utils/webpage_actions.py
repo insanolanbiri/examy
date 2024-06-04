@@ -7,7 +7,7 @@ from examy.models.ExamDescriptor import ExamDescriptor
 from examy.models.Student import Student
 
 
-def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
+def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor, **kwargs):
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.support.expected_conditions import (
         presence_of_element_located, url_changes
@@ -17,7 +17,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     driver.get(exam_descriptor.login_url)
 
     # grade
-    WebDriverWait(driver, 5).until(
+    WebDriverWait(driver, kwargs.get("timeout1", 5)).until(
         presence_of_element_located(
             (
                 "xpath",
@@ -67,7 +67,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
 
     # check if successful
     try:
-        WebDriverWait(driver, 3).until(
+        WebDriverWait(driver, kwargs.get("timeout2", 3)).until(
             url_changes(exam_descriptor.login_url)
         )
     except TimeoutException as e:

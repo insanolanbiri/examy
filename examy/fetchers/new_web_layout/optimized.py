@@ -18,7 +18,7 @@ class OptimizedNewTypeFetcher(SeleniumCompatibleFetcher):
         from examy.fetchers.new_web_layout.utils.process_html import process_result_html
         import requests
 
-        login(self.driver, student, exam_descriptor)
+        login(self.driver, student, exam_descriptor, **kwargs.get("login_kwargs"))
 
         try:
             address = get_result_page_address(self.driver, exam_descriptor)
