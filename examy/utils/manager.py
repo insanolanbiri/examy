@@ -20,7 +20,7 @@ class Manager(object):
         self._groups: list[StudentGroup] = []
         self.webdriver_generator = webdriver_generator
 
-        self._drivers: dict = {}
+        self._fetchers: dict = {}
         self._exam_descriptor: ExamDescriptor | None = None
         self._fetcher_type: type[ExamFetcher] | None = None
 
@@ -51,13 +51,14 @@ class Manager(object):
                 yield st
 
     def _init_thread(self) -> None:
+        fetcher = self._fetcher_type()
         if issubclass(self._fetcher_type, SeleniumCompatibleFetcher):
-            self._drivers[threading.current_thread().name] = self.webdriver_generator()
+            fetcher.driver = self.webdriver_generator()
+
+        self._fetchers[threading.current_thread().name] = fetcher
 
     def _fetch_single(self, st: Student):
-        fetcher = self._fetcher_type()
-        if isinstance(fetcher, SeleniumCompatibleFetcher):
-            fetcher.driver = self._drivers[threading.current_thread().name]
+        fetcher = self._fetchers[threading.current_thread().name]
 
         err_list = self.errored_students[self._exam_descriptor.exam_name]
 
@@ -107,9 +108,10 @@ class Manager(object):
                 # for loop is required for waiting for the results
                 logger.debug(f"{i}/{count} done.")
 
-        for i in self._drivers.values():
-            i.quit()
+        for f in self._fetchers.values():
+            if isinstance(f, SeleniumCompatibleFetcher):
+                f.driver.quit()
+        self._fetchers = {}
 
-        self._drivers = {}
         self._fetcher_type = None
         self._exam_descriptor = None
