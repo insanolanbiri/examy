@@ -10,7 +10,7 @@ from examy.models.Student import Student
 def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     from selenium.webdriver.support.wait import WebDriverWait
     from selenium.webdriver.support.expected_conditions import (
-        presence_of_element_located,
+        presence_of_element_located, url_changes
     )
     from selenium.common.exceptions import NoSuchElementException, TimeoutException
 
@@ -68,12 +68,7 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor):
     # check if successful
     try:
         WebDriverWait(driver, 8).until(
-            presence_of_element_located(
-                (
-                    "xpath",
-                    f"/html/body/section",
-                )
-            )
+            url_changes(exam_descriptor.login_url)
         )
     except TimeoutException as e:
         from examy.models.exceptions import StudentNotFound
