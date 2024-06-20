@@ -17,7 +17,6 @@ class Student:
     grade: str = dataclasses.field(init=False)
 
     def __post_init__(self, grade_):
-        """Post init method."""
         if isinstance(grade_, int):
             self.grade = str(grade_) + ".Sınıf"
         else:
