@@ -20,8 +20,8 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor, 
     WebDriverWait(driver, kwargs.get("timeout1", 5)).until(
         presence_of_element_located(
             (
-                "xpath",
-                "/html/body/div/div[1]/div[1]/div[2]/div/div/div[1]/form/div[1]/div/span",
+                "id",
+                "select2-gt_ogrencino_sinifcombo-container",
             )
         )
     ).click()
@@ -31,8 +31,8 @@ def login(driver: WebDriver, student: Student, exam_descriptor: ExamDescriptor, 
 
     # province
     driver.find_element(
-        "xpath",
-        "/html/body/div/div[1]/div[1]/div[2]/div/div/div[1]/form/div[2]/div/span/span[1]/span",
+        "id",
+        "select2-gt_ogrencino_ilcombo-container"
     ).click()
     province_selector = driver.find_element("id", "select2-gt_ogrencino_ilcombo-results")
     click_list_item_by_visible_text(province_selector, student.province)
