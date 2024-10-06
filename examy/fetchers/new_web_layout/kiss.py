@@ -57,7 +57,7 @@ Content-Disposition: form-data; name="ogrno"
 --formsplit
 Content-Disposition: form-data; name="adsoyad"
 
-{student.name}
+{student.login_name}
 --formsplit--
 """ 
         self.session.cookies.clear()
