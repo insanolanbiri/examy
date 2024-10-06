@@ -94,10 +94,17 @@ def logout(driver: WebDriver, exam_descriptor: ExamDescriptor):
 def get_result_page_address(driver: WebDriver, exam_descriptor: ExamDescriptor) -> str:
     # driver must be on the exam selection page
     # note that the url is specific for each student
-    import lxml.html
-    from examy.models.exceptions import StudentDidNotTakeExam
 
     source = driver.page_source
+
+    base_url = driver.current_url.split("?")[0]
+    return base_url + get_result_location_from_source(source, exam_descriptor)
+
+def get_result_location_from_source(source: str, exam_descriptor: ExamDescriptor) -> str:
+    import lxml.html
+
+    from examy.models.exceptions import StudentDidNotTakeExam
+
     tree = lxml.html.fromstring(source)
 
     link = tree.xpath(f"/html/body/section//a[text()='{exam_descriptor.exam_name}']")
@@ -107,6 +114,4 @@ def get_result_page_address(driver: WebDriver, exam_descriptor: ExamDescriptor) 
 
     link = link[0]
 
-    base_url = driver.current_url.split("?")[0]
-
-    return base_url + link.attrib["href"]
+    return link.attrib["href"]
