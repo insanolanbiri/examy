@@ -4,6 +4,7 @@ from examy.models.fetcher import ExamFetcher
 from examy.models.Student import Student
 from examy.models.ExamDescriptor import ExamDescriptor
 from examy.utils import province_codes
+from examy.models.exceptions import StudentNotFound
 
 
 class KissNewTypeFetcher(ExamFetcher):
@@ -65,6 +66,8 @@ Content-Disposition: form-data; name="adsoyad"
                 f'{exam_descriptor.login_url}/ajax/ogrencigirisarama.php',
                 headers={'Content-Type': 'multipart/form-data; boundary=formsplit'},
                 data=data)
+        if response.json()['tamam'] != True:
+            raise StudentNotFound("Got negative result from login endpoint")
 
         dummy_url_base = f"{exam_descriptor.login_url}/ogrenci/"
         response = self.session.get(dummy_url_base, params={'pg': 'sinavsonuclari'})
